@@ -37,11 +37,6 @@
       </div>
     </form>
 
-    <div v-if="translation">
-      Article: {{ title }}
-      Translation: {{ translation }}
-    </div>
-
     <div class="text-center text-lg pb-6">
       or retrieve, translate, and summarize the latest news by category.
     </div>
@@ -112,8 +107,6 @@
 </template>
 
 <script>
-const axios = require('axios')
-
 export default {
   data () {
     return {
@@ -156,6 +149,13 @@ export default {
           language: 'Spanish',
           sites: [
             {
+              site: 'El Mundo',
+              categories: [
+                'General',
+                'Entertainment'
+              ]
+            },
+            {
               site: 'El País',
               categories: [
                 'General',
@@ -168,7 +168,19 @@ export default {
           language: 'Mandarin',
           sites: [
             {
-              site: '新浪微博 / Sina Weibo',
+              site: '新华网 / Xinhua',
+              categories: [
+                'General',
+                'Politics',
+                'Business',
+                'Entertainment',
+                'Science',
+                'Sports',
+                'Military'
+              ]
+            },
+            {
+              site: '新浪网 / Sina',
               categories: [
                 'General',
                 'Entertainment'
@@ -184,17 +196,12 @@ export default {
   methods: {
     submitArticle () {
       if (this.article) {
-        axios.get('http://127.0.0.1:5000/transtitle?lang=en&url=' + this.article)
-          .then((res) => {
-            console.log(res)
-            this.title = res.data.title
-            this.translation = res.data.translation
-            console.log(this.translation)
-          })
+        // push article url to store
+        window.$nuxt.$router.push('/article')
       }
     },
     submitCategory () {
-      console.log('YAYAYAY')
+      window.$nuxt.$router.push('/source')
     },
     selectLang (lang, index) {
       this.selectedSite = ''

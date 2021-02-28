@@ -15,8 +15,8 @@ def hello_world():
   return "Hello, World!"
 
 
-@app.route('/transtitle')
-def get_headline():
+@app.route('/parse')
+def parse():
 
   args = request.args
   url = args['url']
@@ -26,7 +26,15 @@ def get_headline():
   article.download()
   article.parse()
 
-  return json.dumps({'title': article.title, 'translation': google_trans(article.title, lang)}, ensure_ascii=False)
+  summary = 'a'
+
+  return json.dumps(
+    {
+      'title': article.title, 
+      'trans_title': google_trans(article.title, lang), 
+      'summary': google_trans(summary, lang),
+    },
+    ensure_ascii=False)
 
 
 def google_trans(text, target):
