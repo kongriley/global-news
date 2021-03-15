@@ -19,7 +19,7 @@
           <input
             v-model="article"
             class="px-4 w-full h-full focus:outline-none focus:text-gray-600"
-            placeholder="Input a specific article"
+            placeholder="Input a specific article URL"
           >
           <button type="submit" class="px-3 py-2 focus:outline-none z-0 rounded" :class="{'bg-green-400': article, 'text-white': article}">
             <svg
@@ -121,86 +121,26 @@ export default {
       selectedSiteIndex: 0,
       selectedCat: '',
 
-      languages: [
-        {
-          language: 'English',
-          sites: [
-            {
-              site: 'The New York Times',
-              categories: [
-                'General',
-                'Entertainment'
-              ]
-            },
-            {
-              site: 'CNN',
-              categories: [
-                'General',
-                'Politics',
-                'Business',
-                'Entertainment',
-                'Science',
-                'Sports'
-              ]
-            }
-          ]
-        },
-        {
-          language: 'Spanish',
-          sites: [
-            {
-              site: 'El Mundo',
-              categories: [
-                'General',
-                'Entertainment'
-              ]
-            },
-            {
-              site: 'El País',
-              categories: [
-                'General',
-                'Entertainment'
-              ]
-            }
-          ]
-        },
-        {
-          language: 'Mandarin',
-          sites: [
-            {
-              site: '新华网 / Xinhua',
-              categories: [
-                'General',
-                'Politics',
-                'Business',
-                'Entertainment',
-                'Science',
-                'Sports',
-                'Military'
-              ]
-            },
-            {
-              site: '新浪网 / Sina',
-              categories: [
-                'General',
-                'Entertainment'
-              ]
-            }
-          ]
-        }
-      ]
+      languages: []
 
     }
+  },
+
+  mounted () {
+    this.languages = this.$store.state.languages
   },
 
   methods: {
     submitArticle () {
       if (this.article) {
+        this.$store.commit('setUrl', this.article)
         // push article url to store
         window.$nuxt.$router.push('/article')
       }
     },
     submitCategory () {
+      this.$store.commit('setSelectedLang', this.selectedLang)
+      this.$store.commit('setSelectedSource', this.selectedSite)
       window.$nuxt.$router.push('/source')
     },
     selectLang (lang, index) {

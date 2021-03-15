@@ -8,6 +8,7 @@ Covers the following websites and categories:
   - CNN
 - Spanish
   - El País
+  - El Mundo
 - Mandarin
+  - 新华网 / Xinhua
   - 新浪网 / Sina
-  - 南方周末 / Southern Weekly

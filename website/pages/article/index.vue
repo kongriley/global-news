@@ -1,11 +1,12 @@
 <template>
   <div>
+    <parse-load ref="load"/>
     <div class="flex justify-center pt-16 pb-12 z-10">
       <div class="inline-flex items-center border-2 text-gray-400 divide-x rounded w-1/2">
         <input
-          v-model="article"
+          v-model="url"
           class="px-4 w-full h-full focus:outline-none focus:text-gray-600"
-          placeholder="http://www.xinhuanet.com/2021-02/27/c_1127147854.htm"
+          placeholder="Input a specific article URL"
         >
         <button type="submit" class="px-3 py-2 focus:outline-none z-0 rounded bg-green-400 text-white">
           <svg
@@ -21,19 +22,35 @@
         </button>
       </div>
     </div>
-    <div class="flex justify-center pb-6">
+
+    <div class="flex justify-center pb-6" v-if="$store.state.parsed">
       <div class="w-3/4">
         <div class="text-2xl font-semibold text-center pb-2">
-          China's new recombinant coronavirus vaccine (adenovirus vector) has been conditionally approved by the State Food and Drug Administration for listing and registration applications
+          {{ $store.state.title }}
         </div>
-        <div class="text-xl text-gray-600 text-center pb-8">
-        我国重组新冠病毒疫苗（腺病毒载体）获国家药监局附条件批准上市注册申请
+        <div class="text-xl text-gray-600 text-center pb-8" v-if="$store.state.trans_title">
+          {{ $store.state.trans_title }}
         </div>
         <div class="text-lg">
-          The recombinant new crown vaccine (adenovirus vector) adopts a single-dose immunization program, which can be stored stably between 2 and 8 degrees Celsius, and is easy to transport and store. On March 16, 2020, the vaccine started a phase I clinical trial in Wuhan, and on April 12 in Wuhan. The vaccine has previously been authorized for emergency use in Pakistan and Mexico.
+          {{ $store.state.summary }}
         </div>
       </div>
     </div>
+    <!--
+    <div class="flex justify-center pb-6">
+      <div class="w-3/4">
+        <div class="text-2xl font-semibold text-center pb-2">
+          Two killed in an accident on the Jujan - Yaguachi road
+        </div>
+        <div class="text-xl text-gray-600 text-center pb-8">
+          Dos muertos en accidente en la vía Jujan - Yaguachi
+        </div>
+        <div class="text-lg">
+          A bus and a vehicle hit each other around noon on Friday the 26th. Two people died and three injuries were registered after the collision between an interprovincial transport bus and a light vehicle on the Jujan-Tres Postes road - Yaguachi. Agents of the Ecuadorian Transit Commission (CTE) went to the site and evidenced the presence of two bodies.
+        </div>
+      </div>
+    </div>
+    -->
 
     <div class="flex justify-center">
       <div class="inline-flex border rounded">
@@ -49,8 +66,21 @@
 </template>
 
 <script>
+import ParseLoad from '../../components/ParseLoad.vue'
 export default {
-
+  components: { ParseLoad },
+  data () {
+    return {
+      url: this.$store.state.url
+    }
+  },
+  mounted () {
+    this.$store.dispatch('parse').then(() => {
+      this.$refs.load.finish()
+    }).catch((err) => {
+      this.$refs.load.throwErr(err.message)
+    })
+  }
 }
 </script>
 
